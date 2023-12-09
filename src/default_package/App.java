@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import utils.Reader;
+import utils.Writer;
 
 public class App {
 
@@ -11,6 +12,8 @@ public class App {
 		Reader r=new Reader();
 		List<ArrayList<String>>rezultat=r.ucitaj("korisnik.txt");
 		rezultat.forEach(System.out::println);
+		Writer w=new Writer();
+		w.upis("kopija.txt", rezultat);
 
 	}
 
