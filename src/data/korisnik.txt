@@ -1,0 +1,3 @@
+a|a|A|a|
+b|b|B|B
+c|c|C|c
