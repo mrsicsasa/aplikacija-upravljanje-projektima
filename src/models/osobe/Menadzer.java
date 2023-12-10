@@ -11,9 +11,8 @@ public Menadzer(String ime, String prezime, int plata, LocalDateTime pocetakAnga
 	this.uloga = uloga;
 }
 
-public Menadzer(String ime, String prezime, int plata, LocalDateTime pocetakAngazovanja,
-		LocalDateTime zavrsetakAngazovanja) {
-	super(ime, prezime, plata, pocetakAngazovanja, zavrsetakAngazovanja);
+public Menadzer() {
+	
 }
 
 public Uloga getUloga() {
