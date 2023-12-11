@@ -12,6 +12,9 @@ import models.osobe.Odmor;
 import models.osobe.Odmori;
 import models.osobe.Promoter;
 import models.osobe.Uloga;
+import models.proizvodi.Dimenzije;
+import models.proizvodi.KvarljiviProizvod;
+import models.proizvodi.TehnickiProizvod;
 
 public class Mapper {
 public Mapper() {
@@ -58,11 +61,49 @@ private Promoter konvertujPodatakUPromotera(ArrayList<String> podatak) {
             podatak.get(0),
             podatak.get(1),
             Integer.parseInt(podatak.get(2)),
-            LocalDateTime.parse(podatak.get(3), FORMATTER),
-            LocalDateTime.parse(podatak.get(4), FORMATTER),
+            parsirajDatum(podatak.get(3), FORMATTER),
+            parsirajDatum(podatak.get(4), FORMATTER),
             menazder,
             new Odmori(odmori)
             );
+}
+public ArrayList<KvarljiviProizvod> konvertujUKvarljiviProizvod(List<ArrayList<String>> podaci) {
+    return podaci.stream()
+            .map(this::konvertujPodatakUKvarljiviProizvod)
+            .collect(Collectors.toCollection(ArrayList::new));
+}
+
+private KvarljiviProizvod konvertujPodatakUKvarljiviProizvod(ArrayList<String> podatak) {
+  return new KvarljiviProizvod
+		  (
+			podatak.get(0),
+			Integer.parseInt(podatak.get(1)),
+			podatak.get(2),
+			podatak.get(3),
+			podatak.get(4),
+			parsirajDatum(podatak.get(5), FORMATTER),
+			Integer.parseInt(podatak.get(6))
+		  );
+}
+public ArrayList<TehnickiProizvod> konvertujUTehnickiProizvod(List<ArrayList<String>> podaci) {
+    return podaci.stream()
+            .map(this::konvertujPodatakUTehnickiProizvod)
+            .collect(Collectors.toCollection(ArrayList::new));
+}
+
+private TehnickiProizvod konvertujPodatakUTehnickiProizvod(ArrayList<String> podatak) {
+  return new TehnickiProizvod
+		  (
+			podatak.get(0),
+			Integer.parseInt(podatak.get(1)),
+			podatak.get(2),
+			podatak.get(3),
+			podatak.get(4),
+			new Dimenzije(Double.parseDouble(podatak.get(5)),
+			Double.parseDouble(podatak.get(6))),
+			Double.parseDouble(podatak.get(7)),
+			Double.parseDouble(podatak.get(8))
+		  );
 }
 
 }
