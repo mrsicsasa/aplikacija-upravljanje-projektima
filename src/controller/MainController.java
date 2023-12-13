@@ -1,7 +1,7 @@
 package controller;
 
 import view.MainView;
-import view.MenadzerForm;
+import view.MenadzerDialog;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -24,7 +24,7 @@ public class MainController {
 
     private void prikaziFormu(int index) {
         if (index == 0) { // Ako je pritisnuto prvo dugme
-            MenadzerForm menadzerForm = new MenadzerForm();
+            MenadzerDialog menadzerForm = new MenadzerDialog();
             Object[] options = {"Sacuvaj", "Otkazi"};
             menadzerForm.osveziTabelu();
             int result = JOptionPane.showOptionDialog(null, menadzerForm, "Izmena Menadzera",

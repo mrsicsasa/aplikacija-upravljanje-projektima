@@ -21,10 +21,14 @@ public class Mapper {
 		super();
 	}
 
-	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
 	private LocalDateTime parsirajDatum(String datum, DateTimeFormatter formatter) {
-		return LocalDateTime.parse(datum, FORMATTER);
+		if(datum.contains("T")) {
+			return LocalDateTime.parse(datum.replace("T", " "), FORMATTER);
+		}else {
+			return LocalDateTime.parse(datum, FORMATTER);
+		}
 	}
 
 	public ArrayList<Menadzer> konvertujUMenadzer(List<ArrayList<String>> podaci) {
