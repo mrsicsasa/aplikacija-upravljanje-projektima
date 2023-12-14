@@ -1,5 +1,7 @@
 package models.osobe;
 
+import java.util.Objects;
+
 public class Uloga {
 	private String naziv;
 	private String opis;
@@ -45,4 +47,21 @@ public class Uloga {
 		return naziv + "|" + opis + "|" + odgovornosti;
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(naziv, odgovornosti, opis);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj)
+	        return true;
+	    if (obj == null || getClass() != obj.getClass())
+	        return false;
+	    Uloga other = (Uloga) obj;
+	    return Objects.equals(naziv, other.naziv)
+	            && Objects.equals(opis, other.opis)
+	            && Objects.equals(odgovornosti, other.odgovornosti);
+	}
+	
 }

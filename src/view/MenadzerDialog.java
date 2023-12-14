@@ -24,7 +24,7 @@ public class MenadzerDialog extends JPanel {
 	pocetakAngazovanjaField,krajAngazovanjaField,opisUlogeField,odgovornostiUlogeField;
 	private JTable menadzerTable;
 	private ArrayList<Menadzer> menadzeri = new ArrayList<Menadzer>();
-
+	private Menadzer trenutniMenadzer=new Menadzer();
 	public MenadzerDialog() {
 		setLayout(new BorderLayout());
 
@@ -87,13 +87,23 @@ public class MenadzerDialog extends JPanel {
 	                 imeField.setText( menadzerTable.getValueAt(selectedRow, 0).toString());
 	                prezimeField.setText( menadzerTable.getValueAt(selectedRow, 1).toString());
 	                 plataField.setText( menadzerTable.getValueAt(selectedRow, 2).toString());
-	                 imeUlogaField.setText( menadzerTable.getValueAt(selectedRow, 3).toString());
-	             	//pocetakAngazovanjaField=new JTextField();
-	        		//krajAngazovanjaField=new JTextField();
-	        		//imeUlogaField = new JTextField();
-	        		//opisUlogeField=new JTextField();
-	        		//odgovornostiUlogeField=new JTextField();
-	            
+	             	pocetakAngazovanjaField.setText(menadzerTable.getValueAt(selectedRow, 3).toString());
+	        		krajAngazovanjaField.setText(menadzerTable.getValueAt(selectedRow, 4).toString());
+	        		imeUlogaField.setText( menadzerTable.getValueAt(selectedRow, 5).toString());
+	        		opisUlogeField.setText( menadzerTable.getValueAt(selectedRow, 6).toString());
+	        		odgovornostiUlogeField.setText( menadzerTable.getValueAt(selectedRow, 7).toString());
+	        		trenutniMenadzer.setIme(menadzerTable.getValueAt(selectedRow, 0).toString());
+	        		trenutniMenadzer.setPrezime(menadzerTable.getValueAt(selectedRow, 1).toString());
+	        		trenutniMenadzer.setPlata(Integer.parseInt(menadzerTable.getValueAt(selectedRow, 2).toString()));
+	        		trenutniMenadzer.setPocetakAngazovanja(parsirajDatum(menadzerTable.getValueAt(selectedRow, 3).toString()));
+	        		trenutniMenadzer.setZavrsetakAngazovanja(parsirajDatum(menadzerTable.getValueAt(selectedRow, 4).toString()));
+	        		Uloga trenutnaUloga=new Uloga(
+	        				menadzerTable.getValueAt(selectedRow, 5).toString(),
+	        				menadzerTable.getValueAt(selectedRow, 6).toString(),
+	        				menadzerTable.getValueAt(selectedRow, 7).toString()
+	        				);
+	        		trenutniMenadzer.setUloga(trenutnaUloga);
+	        		System.out.println(trenutniMenadzer.getIme());
 	            }
 	        }
 	    });
@@ -132,13 +142,39 @@ public class MenadzerDialog extends JPanel {
 		String opisUloge=opisUlogeField.getText();
 		String odgovornostiUloge=odgovornostiUlogeField.getText();
 		Uloga uloga = new Uloga(ulogaNaziv, opisUloge, odgovornostiUloge); // Neki default opis i odgovornosti
-
+		System.out.println(trenutniMenadzer.getIme());
 		Menadzer noviMenadzer = new Menadzer(ime, prezime, plata, pocetakAngazovanja, krajAngazovanja, uloga);
 		// Ovde možete dalje raditi sa novim menadžerom, npr. dodati ga u neku listu ili
 		// bazu podataka
-		System.out.println(noviMenadzer.toString());
+		Writer w = new Writer();
+		Reader r = new Reader();
+		Mapper m=new Mapper();
+		ArrayList<String> noviMenadzerPodaci=new ArrayList<String>();
+		noviMenadzerPodaci.add(ime);
+		noviMenadzerPodaci.add(prezime);
+		noviMenadzerPodaci.add(String.valueOf(plata));
+		noviMenadzerPodaci.add(parsirajDatumuString(pocetakAngazovanja));
+		noviMenadzerPodaci.add(parsirajDatumuString(krajAngazovanja));
+		noviMenadzerPodaci.add(ulogaNaziv);
+		noviMenadzerPodaci.add(opisUloge);
+		noviMenadzerPodaci.add(odgovornostiUloge);
+		List<ArrayList<String>> rezultat = r.ucitaj("korisnik.txt");
+		for(int i = 0; i < rezultat.size(); i++) {
+			ArrayList<String> rez = rezultat.get(i);
+			if(rez.get(0).equals(trenutniMenadzer.getIme())&&rez.get(1).equals(trenutniMenadzer.getPrezime())&&rez.get(2).equals(String.valueOf(trenutniMenadzer.getPlata()))
+					&&rez.get(2).equals(String.valueOf(trenutniMenadzer.getPlata()))
+					&&rez.get(3).equals(parsirajDatumuString(trenutniMenadzer.getPocetakAngazovanja()))&&rez.get(4).equals(parsirajDatumuString(trenutniMenadzer.getZavrsetakAngazovanja()))
+					&&rez.get(5).equals(trenutniMenadzer.getUloga().getNaziv())&&rez.get(6).equals(trenutniMenadzer.getUloga().getOpis())&&rez.get(7).equals(trenutniMenadzer.getUloga().getOdgovornosti())) {
+				System.out.println("isti su");
+				rezultat.set(i, noviMenadzerPodaci);
+				
+			}else {
+				System.out.println("nisu isti");
+			}
+		}
+		w.upis("korisnik.txt", rezultat);
+		
 		menadzeri.clear();
-		menadzeri.add(noviMenadzer);
 		// Osveži tabelu sa novim podacima
 		osveziTabelu();
 
@@ -193,14 +229,22 @@ public class MenadzerDialog extends JPanel {
 		model.addColumn("Ime");
 		model.addColumn("Prezime");
 		model.addColumn("Plata");
-		model.addColumn("Uloga");
+		model.addColumn("Pocetak angozavanje");
+		model.addColumn("Kraj angazovanja");
+		model.addColumn("Uloga naziv");
+		model.addColumn("Uloga opis");
+		model.addColumn("Uloga odgovornosti");
 
 		for (Menadzer menadzer : menadzeri) {
 			Vector<Object> row = new Vector<>();
 			row.add(menadzer.getIme());
 			row.add(menadzer.getPrezime());
 			row.add(menadzer.getPlata());
+			row.add(menadzer.getPocetakAngazovanja());
+			row.add(menadzer.getZavrsetakAngazovanja());
 			row.add(menadzer.getUloga().getNaziv());
+			row.add(menadzer.getUloga().getOpis());
+			row.add(menadzer.getUloga().getOdgovornosti());
 
 			model.addRow(row);
 		}
@@ -224,7 +268,11 @@ public class MenadzerDialog extends JPanel {
 		imeField.setText("");
 		prezimeField.setText("");
 		plataField.setText("");
+		pocetakAngazovanjaField.setText("");
+		krajAngazovanjaField.setText("");
 		imeUlogaField.setText("");
+		opisUlogeField.setText("");
+		odgovornostiUlogeField.setText("");
 	}
 	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 

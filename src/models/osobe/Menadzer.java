@@ -1,7 +1,7 @@
 package models.osobe;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Menadzer extends AngazovanaOsoba {
 	private Uloga uloga;
@@ -27,6 +27,25 @@ public class Menadzer extends AngazovanaOsoba {
 	@Override
 	public String toString() {
 		return super.toString() + uloga;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(uloga);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Menadzer other = (Menadzer) obj;
+		return Objects.equals(uloga, other.uloga)&&Objects.equals(getIme(), other.getIme())
+				&&Objects.equals(getPrezime(), other.getPrezime())&&Objects.equals(getPlata(), other.getPlata())&&Objects.equals(getPocetakAngazovanja(), other.getPocetakAngazovanja())
+				&&Objects.equals(getZavrsetakAngazovanja(), other.getZavrsetakAngazovanja());
 	}
 
 }
