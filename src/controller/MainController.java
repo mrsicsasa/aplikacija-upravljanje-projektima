@@ -24,15 +24,15 @@ public class MainController {
 
     private void prikaziFormu(int index) {
         if (index == 0) { // Ako je pritisnuto prvo dugme
-            MenadzerDialog menadzerForm = new MenadzerDialog();
+            MenadzerDialog menadzerDialog= new MenadzerDialog();
             Object[] options = {"Sacuvaj", "Otkazi"};
-            menadzerForm.osveziTabelu();
-            int result = JOptionPane.showOptionDialog(null, menadzerForm, "Izmena Menadzera",
+            menadzerDialog.osveziTabelu();
+            int result = JOptionPane.showOptionDialog(null, menadzerDialog, "Izmena Menadzera",
                     JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
          
             if (result == JOptionPane.YES_OPTION) {
                 // Ako korisnik pritisne "Sacuvaj"
-                menadzerForm.sacuvajMenadzera();
+            	menadzerDialog.sacuvajMenadzera();
             }
         } else {
             // Dodajte sličan kod za ostala dugmad prema potrebama vaše aplikacije

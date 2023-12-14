@@ -1,5 +1,6 @@
 package utils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -21,13 +22,13 @@ public class Mapper {
 		super();
 	}
 
-	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-	private LocalDateTime parsirajDatum(String datum, DateTimeFormatter formatter) {
+	private LocalDate parsirajDatum(String datum, DateTimeFormatter formatter) {
 		if(datum.contains("T")) {
-			return LocalDateTime.parse(datum.replace("T", " "), FORMATTER);
+			return LocalDate.parse(datum.replace("T", " ").trim(), FORMATTER);
 		}else {
-			return LocalDateTime.parse(datum, FORMATTER);
+			 return LocalDate.parse(datum.trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		}
 	}
 

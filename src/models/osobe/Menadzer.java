@@ -1,13 +1,14 @@
 package models.osobe;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Menadzer extends AngazovanaOsoba {
 	private Uloga uloga;
 
-	public Menadzer(String ime, String prezime, int plata, LocalDateTime pocetakAngazovanja,
-			LocalDateTime zavrsetakAngazovanja, Uloga uloga) {
-		super(ime, prezime, plata, pocetakAngazovanja, zavrsetakAngazovanja);
+	public Menadzer(String ime, String prezime, int plata, LocalDate pocetakAngazovanja,
+			LocalDate krajAngazovanja, Uloga uloga) {
+		super(ime, prezime, plata, pocetakAngazovanja, krajAngazovanja);
 		this.uloga = uloga;
 	}
 

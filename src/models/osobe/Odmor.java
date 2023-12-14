@@ -1,12 +1,13 @@
 package models.osobe;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Odmor {
-	private LocalDateTime pocetakOdmora;
-	private LocalDateTime krajOdmora;
+	private LocalDate pocetakOdmora;
+	private LocalDate krajOdmora;
 
-	public Odmor(LocalDateTime pocetakOdmora, LocalDateTime krajOdmora) {
+	public Odmor(LocalDate pocetakOdmora, LocalDate krajOdmora) {
 		super();
 		this.pocetakOdmora = pocetakOdmora;
 		this.krajOdmora = krajOdmora;
@@ -16,19 +17,19 @@ public class Odmor {
 		super();
 	}
 
-	public LocalDateTime getPocetakOdmora() {
+	public LocalDate getPocetakOdmora() {
 		return pocetakOdmora;
 	}
 
-	public void setPocetakOdmora(LocalDateTime pocetakOdmora) {
+	public void setPocetakOdmora(LocalDate pocetakOdmora) {
 		this.pocetakOdmora = pocetakOdmora;
 	}
 
-	public LocalDateTime getKrajOdmora() {
+	public LocalDate getKrajOdmora() {
 		return krajOdmora;
 	}
 
-	public void setKrajOdmora(LocalDateTime krajOdmora) {
+	public void setKrajOdmora(LocalDate krajOdmora) {
 		this.krajOdmora = krajOdmora;
 	}
 

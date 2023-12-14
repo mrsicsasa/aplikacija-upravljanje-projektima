@@ -1,20 +1,21 @@
 package models.osobe;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Promoter extends AngazovanaOsoba {
 	private Menadzer naredjeni;
 	private Odmori odmori;
 
-	public Promoter(String ime, String prezime, int plata, LocalDateTime pocetakAngazovanja,
-			LocalDateTime zavrsetakAngazovanja, Menadzer naredjeni, Odmori odmori) {
+	public Promoter(String ime, String prezime, int plata, LocalDate pocetakAngazovanja,
+			LocalDate zavrsetakAngazovanja, Menadzer naredjeni, Odmori odmori) {
 		super(ime, prezime, plata, pocetakAngazovanja, zavrsetakAngazovanja);
 		this.naredjeni = naredjeni;
 		this.odmori = odmori;
 	}
 
-	public Promoter(String ime, String prezime, int plata, LocalDateTime pocetakAngazovanja,
-			LocalDateTime zavrsetakAngazovanja) {
+	public Promoter(String ime, String prezime, int plata, LocalDate pocetakAngazovanja,
+			LocalDate zavrsetakAngazovanja) {
 		super(ime, prezime, plata, pocetakAngazovanja, zavrsetakAngazovanja);
 	}
 

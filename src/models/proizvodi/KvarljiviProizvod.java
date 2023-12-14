@@ -1,13 +1,14 @@
 package models.proizvodi;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class KvarljiviProizvod extends Proizvod {
-	private LocalDateTime rokTrajanja;
+	private LocalDate rokTrajanja;
 	private int temperaturaSkladistenja;
 
 	public KvarljiviProizvod(String naziv, int cena, String zemljaPorekla, String model, String jedinicaMere,
-			LocalDateTime rokTrajanja, int temperaturaSkladistenja) {
+			LocalDate rokTrajanja, int temperaturaSkladistenja) {
 		super(naziv, cena, zemljaPorekla, model, jedinicaMere);
 		this.rokTrajanja = rokTrajanja;
 		this.temperaturaSkladistenja = temperaturaSkladistenja;
@@ -17,11 +18,11 @@ public class KvarljiviProizvod extends Proizvod {
 		super(naziv, cena, zemljaPorekla, model, jedinicaMere);
 	}
 
-	public LocalDateTime getRokTrajanja() {
+	public LocalDate getRokTrajanja() {
 		return rokTrajanja;
 	}
 
-	public void setRokTrajanja(LocalDateTime rokTrajanja) {
+	public void setRokTrajanja(LocalDate rokTrajanja) {
 		this.rokTrajanja = rokTrajanja;
 	}
 

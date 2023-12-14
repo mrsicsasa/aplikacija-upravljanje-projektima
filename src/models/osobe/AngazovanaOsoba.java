@@ -1,16 +1,16 @@
 package models.osobe;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public abstract class AngazovanaOsoba {
 	private String ime;
 	private String prezime;
 	private int plata;
-	private LocalDateTime pocetakAngazovanja;
-	private LocalDateTime zavrsetakAngazovanja;
+	private LocalDate pocetakAngazovanja;
+	private LocalDate zavrsetakAngazovanja;
 
-	public AngazovanaOsoba(String ime, String prezime, int plata, LocalDateTime pocetakAngazovanja,
-			LocalDateTime zavrsetakAngazovanja) {
+	public AngazovanaOsoba(String ime, String prezime, int plata, LocalDate pocetakAngazovanja,
+			LocalDate zavrsetakAngazovanja) {
 		super();
 		this.ime = ime;
 		this.prezime = prezime;
@@ -47,19 +47,19 @@ public abstract class AngazovanaOsoba {
 		this.plata = plata;
 	}
 
-	public LocalDateTime getPocetakAngazovanja() {
+	public LocalDate getPocetakAngazovanja() {
 		return pocetakAngazovanja;
 	}
 
-	public void setPocetakAngazovanja(LocalDateTime pocetakAngazovanja) {
+	public void setPocetakAngazovanja(LocalDate pocetakAngazovanja) {
 		this.pocetakAngazovanja = pocetakAngazovanja;
 	}
 
-	public LocalDateTime getZavrsetakAngazovanja() {
+	public LocalDate getZavrsetakAngazovanja() {
 		return zavrsetakAngazovanja;
 	}
 
-	public void setZavrsetakAngazovanja(LocalDateTime zavrsetakAngazovanja) {
+	public void setZavrsetakAngazovanja(LocalDate zavrsetakAngazovanja) {
 		this.zavrsetakAngazovanja = zavrsetakAngazovanja;
 	}
 

@@ -10,6 +10,7 @@ import utils.Reader;
 import utils.Writer;
 
 import java.awt.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -126,8 +127,8 @@ public class MenadzerDialog extends JPanel {
 		String prezime = prezimeField.getText();
 		int plata = Integer.parseInt(plataField.getText());
 		String ulogaNaziv = imeUlogaField.getText();
-		LocalDateTime pocetakAngazovanja=parsirajDatum(pocetakAngazovanjaField.getText());
-		LocalDateTime krajAngazovanja=parsirajDatum(krajAngazovanjaField.getText());
+		LocalDate pocetakAngazovanja=parsirajDatum(pocetakAngazovanjaField.getText());
+		LocalDate krajAngazovanja=parsirajDatum(krajAngazovanjaField.getText());
 		String opisUloge=opisUlogeField.getText();
 		String odgovornostiUloge=odgovornostiUlogeField.getText();
 		Uloga uloga = new Uloga(ulogaNaziv, opisUloge, odgovornostiUloge); // Neki default opis i odgovornosti
@@ -150,8 +151,8 @@ public class MenadzerDialog extends JPanel {
 		String prezime = prezimeField.getText();
 		int plata = Integer.parseInt(plataField.getText());
 		String ulogaNaziv = imeUlogaField.getText();
-		LocalDateTime pocetakAngazovanja=parsirajDatum(pocetakAngazovanjaField.getText());
-		LocalDateTime krajAngazovanja=parsirajDatum(krajAngazovanjaField.getText());
+		LocalDate pocetakAngazovanja=parsirajDatum(pocetakAngazovanjaField.getText());
+		LocalDate krajAngazovanja=parsirajDatum(krajAngazovanjaField.getText());
 		String opisUloge=opisUlogeField.getText();
 		String odgovornostiUloge=odgovornostiUlogeField.getText();
 
@@ -184,8 +185,7 @@ public class MenadzerDialog extends JPanel {
 	}
 
 	public void osveziTabelu() {
-		// Dobavi podatke iz ArrayList<Menadzer> i osveži tabelu
-		// Pretpostavljamo da imate ArrayList<Menadzer> instancu dostupnu
+		
 		menadzeri = getMenadzeri();
 
 		// Postavi model tabele sa podacima
@@ -226,15 +226,14 @@ public class MenadzerDialog extends JPanel {
 		plataField.setText("");
 		imeUlogaField.setText("");
 	}
-	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-	private LocalDateTime parsirajDatum(String datum) {
-		return LocalDateTime.parse(datum, FORMATTER);
+	private LocalDate parsirajDatum(String datum) {
+		return LocalDate.parse(datum, FORMATTER);
 	}
-	private String parsirajDatumuString(LocalDateTime datum) {
-		String  rez = String.format("%04d-%02d-%02d %02d:%02d", 
-		        datum.getYear(), datum.getMonthValue(), datum.getDayOfMonth(),
-		        datum.getHour(), datum.getMinute());
+	private String parsirajDatumuString(LocalDate datum) {
+		String  rez = String.format("%04d-%02d-%02d", 
+		        datum.getYear(), datum.getMonthValue(), datum.getDayOfMonth());
 		    return rez;
 	
 	}
