@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Vector;
 
 public class MenadzerDialog extends JPanel {
+	private static final String FILE_NAME = "korisnik.txt";
+	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	private static final long serialVersionUID = 1L;
 	private JTextField imeField, prezimeField, plataField, imeUlogaField,
 	pocetakAngazovanjaField,krajAngazovanjaField,opisUlogeField,odgovornostiUlogeField;
@@ -65,15 +67,15 @@ public class MenadzerDialog extends JPanel {
 		formPanel.add(odgovornostiUlogeField);
 		
 
-		JButton sacuvajButton = new JButton("Sacuvaj");
-		JButton editButton = new JButton("Izmeni");
-		JButton deleteButton = new JButton("Obrisi");
-		sacuvajButton.addActionListener(e -> sacuvajMenadzera());
-		editButton.addActionListener(e -> izmeniMenadzera());
-		deleteButton.addActionListener(e -> izbrisiMenadzera());
-		formPanel.add(sacuvajButton);
-		formPanel.add(editButton);
-		formPanel.add(deleteButton);
+		  	JButton sacuvajButton = new JButton("Sacuvaj");
+	        JButton editButton = new JButton("Izmeni");
+	        JButton deleteButton = new JButton("Obrisi");
+	        sacuvajButton.addActionListener(e -> sacuvajMenadzera());
+	        editButton.addActionListener(e -> izmeniMenadzera());
+	        deleteButton.addActionListener(e -> izbrisiMenadzera());
+	        formPanel.add(sacuvajButton);
+	        formPanel.add(editButton);
+	        formPanel.add(deleteButton);
 
 		// Panel za tabelu
 		JPanel tablePanel = new JPanel(new BorderLayout());
@@ -116,20 +118,21 @@ public class MenadzerDialog extends JPanel {
 	}
 
 	private void izbrisiMenadzera() {
-		String ime = imeField.getText();
-		Writer w = new Writer();
-		Reader r = new Reader();
-		List<ArrayList<String>> rezultat = r.ucitaj("korisnik.txt");
-	    Iterator<ArrayList<String>> iterator = rezultat.iterator();
-	    while (iterator.hasNext()) {
-	        ArrayList<String> rez = iterator.next();
-	        if (rez.get(0).equals(ime)) {
-	            iterator.remove();
-	            w.upis("korisnik.txt", rezultat);
+		   String ime = imeField.getText();
+	        Writer writer = new Writer();
+	        Reader reader = new Reader();
+	        List<ArrayList<String>> data = reader.ucitaj(FILE_NAME);
+
+	        Iterator<ArrayList<String>> iterator = data.iterator();
+	        while (iterator.hasNext()) {
+	            ArrayList<String> rez = iterator.next();
+	            if (rowMatchesCurrentMenadzer(rez)) {
+	                iterator.remove();
+	                writer.upis(FILE_NAME, data);
+	            }
 	        }
-	    }
-	    menadzeri.clear();
-	    osveziTabelu();
+	        menadzeri.clear();
+	        osveziTabelu();
 	}
 
 	private void izmeniMenadzera() {
@@ -141,11 +144,9 @@ public class MenadzerDialog extends JPanel {
 		LocalDate krajAngazovanja=parsirajDatum(krajAngazovanjaField.getText());
 		String opisUloge=opisUlogeField.getText();
 		String odgovornostiUloge=odgovornostiUlogeField.getText();
-		Uloga uloga = new Uloga(ulogaNaziv, opisUloge, odgovornostiUloge); // Neki default opis i odgovornosti
+		Uloga uloga = new Uloga(ulogaNaziv, opisUloge, odgovornostiUloge); 
 		System.out.println(trenutniMenadzer.getIme());
 		Menadzer noviMenadzer = new Menadzer(ime, prezime, plata, pocetakAngazovanja, krajAngazovanja, uloga);
-		// Ovde možete dalje raditi sa novim menadžerom, npr. dodati ga u neku listu ili
-		// bazu podataka
 		Writer w = new Writer();
 		Reader r = new Reader();
 		Mapper m=new Mapper();
@@ -161,10 +162,7 @@ public class MenadzerDialog extends JPanel {
 		List<ArrayList<String>> rezultat = r.ucitaj("korisnik.txt");
 		for(int i = 0; i < rezultat.size(); i++) {
 			ArrayList<String> rez = rezultat.get(i);
-			if(rez.get(0).equals(trenutniMenadzer.getIme())&&rez.get(1).equals(trenutniMenadzer.getPrezime())&&rez.get(2).equals(String.valueOf(trenutniMenadzer.getPlata()))
-					&&rez.get(2).equals(String.valueOf(trenutniMenadzer.getPlata()))
-					&&rez.get(3).equals(parsirajDatumuString(trenutniMenadzer.getPocetakAngazovanja()))&&rez.get(4).equals(parsirajDatumuString(trenutniMenadzer.getZavrsetakAngazovanja()))
-					&&rez.get(5).equals(trenutniMenadzer.getUloga().getNaziv())&&rez.get(6).equals(trenutniMenadzer.getUloga().getOpis())&&rez.get(7).equals(trenutniMenadzer.getUloga().getOdgovornosti())) {
+			if(rowMatchesCurrentMenadzer(rez)) {
 				System.out.println("isti su");
 				rezultat.set(i, noviMenadzerPodaci);
 				
@@ -175,7 +173,6 @@ public class MenadzerDialog extends JPanel {
 		w.upis("korisnik.txt", rezultat);
 		
 		menadzeri.clear();
-		// Osveži tabelu sa novim podacima
 		osveziTabelu();
 
 		JOptionPane.showMessageDialog(this, "Menadzer sacuvan!");
@@ -195,8 +192,7 @@ public class MenadzerDialog extends JPanel {
 		Uloga uloga = new Uloga(ulogaNaziv, opisUloge, odgovornostiUloge); // Neki default opis i odgovornosti
 
 		Menadzer noviMenadzer = new Menadzer(ime, prezime, plata, pocetakAngazovanja, krajAngazovanja, uloga);
-		// Ovde možete dalje raditi sa novim menadžerom, npr. dodati ga u neku listu ili
-		// bazu podataka
+
 		System.out.println(noviMenadzer.toString());
 		Writer w = new Writer();
 		Reader r = new Reader();
@@ -212,7 +208,6 @@ public class MenadzerDialog extends JPanel {
 		noviMenadzerPodaci.add(noviMenadzer.getUloga().getOdgovornosti());
 		rezultat.add(noviMenadzerPodaci);
 		w.upis("korisnik.txt", rezultat);
-		// Osveži tabelu sa novim podacima
 		menadzeri.clear();
 		osveziTabelu();
 
@@ -224,7 +219,6 @@ public class MenadzerDialog extends JPanel {
 		
 		menadzeri = getMenadzeri();
 
-		// Postavi model tabele sa podacima
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn("Ime");
 		model.addColumn("Prezime");
@@ -255,7 +249,6 @@ public class MenadzerDialog extends JPanel {
 	private ArrayList<Menadzer> getMenadzeri() {
 		Reader r = new Reader();
 		List<ArrayList<String>> rezultat = r.ucitaj("korisnik.txt");
-		// rezultat.forEach(System.out::println);
 		Mapper m = new Mapper();
 		ArrayList<Menadzer> instance = m.konvertujUMenadzer(rezultat);
 		ArrayList<Menadzer> sveMenadzeri = new ArrayList<>();
@@ -274,8 +267,7 @@ public class MenadzerDialog extends JPanel {
 		opisUlogeField.setText("");
 		odgovornostiUlogeField.setText("");
 	}
-	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
+	
 	private LocalDate parsirajDatum(String datum) {
 		return LocalDate.parse(datum, FORMATTER);
 	}
@@ -285,4 +277,14 @@ public class MenadzerDialog extends JPanel {
 		    return rez;
 	
 	}
+	  private boolean rowMatchesCurrentMenadzer(ArrayList<String> row) {
+	        return row.get(0).equals(trenutniMenadzer.getIme()) &&
+	               row.get(1).equals(trenutniMenadzer.getPrezime()) &&
+	               row.get(2).equals(String.valueOf(trenutniMenadzer.getPlata())) &&
+	               row.get(3).equals(parsirajDatumuString(trenutniMenadzer.getPocetakAngazovanja())) &&
+	               row.get(4).equals(parsirajDatumuString(trenutniMenadzer.getZavrsetakAngazovanja())) &&
+	               row.get(5).equals(trenutniMenadzer.getUloga().getNaziv()) &&
+	               row.get(6).equals(trenutniMenadzer.getUloga().getOpis()) &&
+	               row.get(7).equals(trenutniMenadzer.getUloga().getOdgovornosti());
+	    }
 }
