@@ -14,8 +14,8 @@ public class KvarljiviProizvod extends Proizvod {
 		this.temperaturaSkladistenja = temperaturaSkladistenja;
 	}
 
-	public KvarljiviProizvod(String naziv, int cena, String zemljaPorekla, String model, String jedinicaMere) {
-		super(naziv, cena, zemljaPorekla, model, jedinicaMere);
+	public KvarljiviProizvod() {
+		super();
 	}
 
 	public LocalDate getRokTrajanja() {
