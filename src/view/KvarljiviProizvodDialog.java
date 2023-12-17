@@ -210,13 +210,40 @@ public class KvarljiviProizvodDialog extends JPanel {
         temperaturaSkladistenjaField.setText("");
     }
     private void izmeniKvarljiviProizvod() {
-    	String naziv = nazivField.getText();
+        String naziv = nazivField.getText();
         int cena = Integer.parseInt(cenaField.getText());
         String zemljaPorekla = zemljaPoreklaField.getText();
         String model = modelField.getText();
         String jedinicaMere = jedinicaMereField.getText();
         LocalDate rokTrajanja = LocalDate.parse(rokTrajanjaField.getText());
         int temperaturaSkladistenja = Integer.parseInt(temperaturaSkladistenjaField.getText());
+
         KvarljiviProizvod noviKvarljiviProizvod = new KvarljiviProizvod(naziv, cena, zemljaPorekla, model, jedinicaMere, rokTrajanja, temperaturaSkladistenja);
-    }
-}
+
+        Writer w = new Writer();
+        Reader r = new Reader();
+        Mapper m = new Mapper();
+        ArrayList<String> noviKvarljiviProizvodPodaci = new ArrayList<>();
+        noviKvarljiviProizvodPodaci.add(noviKvarljiviProizvod.getNaziv());
+        noviKvarljiviProizvodPodaci.add(String.valueOf(noviKvarljiviProizvod.getCena()));
+        noviKvarljiviProizvodPodaci.add(noviKvarljiviProizvod.getZemljaPorekla());
+        noviKvarljiviProizvodPodaci.add(noviKvarljiviProizvod.getModel());
+        noviKvarljiviProizvodPodaci.add(noviKvarljiviProizvod.getJedinicaMere());
+        noviKvarljiviProizvodPodaci.add(noviKvarljiviProizvod.getRokTrajanja().toString());
+        noviKvarljiviProizvodPodaci.add(String.valueOf(noviKvarljiviProizvod.getTemperaturaSkladistenja()));
+
+        List<ArrayList<String>> rezultat = r.ucitaj("kvarljiviProizvodi.txt"); // Update the file name accordingly
+        for (int i = 0; i < rezultat.size(); i++) {
+            ArrayList<String> rez = rezultat.get(i);
+            if (rowMatchesCurrentKvarljiviProizvod(rez)) {
+                rezultat.set(i, noviKvarljiviProizvodPodaci);
+            }
+        }
+        w.upis("kvarljiviProizvodi.txt", rezultat);
+
+        kvarljiviProizvodi.clear();
+        osveziTabelu();
+
+        JOptionPane.showMessageDialog(this, "Kvarljivi proizvod izmenjen!");
+        clearFields();
+    }}

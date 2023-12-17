@@ -175,7 +175,7 @@ public class MenadzerDialog extends JPanel {
 		menadzeri.clear();
 		osveziTabelu();
 
-		JOptionPane.showMessageDialog(this, "Menadzer sacuvan!");
+		JOptionPane.showMessageDialog(this, "Menadzer izmenjen!");
 		clearFields();
 	}
 
