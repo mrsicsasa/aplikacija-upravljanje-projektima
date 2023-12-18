@@ -3,6 +3,7 @@ package controller;
 import view.KvarljiviProizvodDialog;
 import view.MainView;
 import view.MenadzerDialog;
+import view.TehnickiProizvodDialog;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -47,7 +48,20 @@ public class MainController {
                 // Ako korisnik pritisne "Sacuvaj"
                 kvarljiviProizvodDialog.sacuvajKvarljiviProizvod();
             }
-        } else {
+        }else if (index == 3) {
+            // Ako je pritisnuto treće dugme
+            TehnickiProizvodDialog tehnickiProizvodDialog=new TehnickiProizvodDialog();
+            Object[] options3 = {"Sacuvaj", "Otkazi"};
+            tehnickiProizvodDialog.osveziTabelu();
+            int result3 = JOptionPane.showOptionDialog(null, tehnickiProizvodDialog, "Izmena kvarljivih proizvoda",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options3, options3[0]);
+
+            if (result3 == JOptionPane.YES_OPTION) {
+                // Ako korisnik pritisne "Sacuvaj"
+                tehnickiProizvodDialog.sacuvajTehnickiProizvod();
+            }
+        } 
+        else {
             // Dodajte sličan kod za ostala dugmad prema potrebama vaše aplikacije
             JOptionPane.showMessageDialog(null, "Forma za Button " + (index + 1));
         }

@@ -13,8 +13,8 @@ public class TehnickiProizvod extends Proizvod {
 		this.radniNapon = radniNapon;
 	}
 
-	public TehnickiProizvod(String naziv, int cena, String zemljaPorekla, String model, String jedinicaMere) {
-		super(naziv, cena, zemljaPorekla, model, jedinicaMere);
+	public TehnickiProizvod() {
+		super();
 	}
 
 	public Dimenzije getDimenzije() {

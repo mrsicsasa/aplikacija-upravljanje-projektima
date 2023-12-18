@@ -1,0 +1,4 @@
+TehnickiProizvod1|1000|Srbija|ModelA|Kilogram|10|20|150|220
+TehnickiProizvod2|1200|Hrvatska|ModelB|Komad|15|25|200|230
+TehnickiProizvod3|1500|BiH|ModelC|Litara|8|15|120|240
+TehnickiProizvod4|1800|Crna Gora|ModelD|Komad|12|18|180|250
