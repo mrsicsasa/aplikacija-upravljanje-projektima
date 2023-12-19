@@ -3,9 +3,13 @@ package controller;
 import view.KvarljiviProizvodDialog;
 import view.MainView;
 import view.MenadzerDialog;
+import view.PromoterDialog;
 import view.TehnickiProizvodDialog;
 
 import javax.swing.*;
+
+import models.osobe.Promoter;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -59,6 +63,18 @@ public class MainController {
             if (result3 == JOptionPane.YES_OPTION) {
                 // Ako korisnik pritisne "Sacuvaj"
                 tehnickiProizvodDialog.sacuvajTehnickiProizvod();
+            }
+        } else if (index == 1) {
+            // Ako je pritisnuto treće dugme
+            PromoterDialog promoterDialog=new PromoterDialog();
+            Object[] options4 = {"Sacuvaj", "Otkazi"};
+           // tehnickiProizvodDialog.osveziTabelu();
+            int result4 = JOptionPane.showOptionDialog(null, promoterDialog, "Izmena kvarljivih proizvoda",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options4, options4[0]);
+
+            if (result4 == JOptionPane.YES_OPTION) {
+                // Ako korisnik pritisne "Sacuvaj"
+                //tehnickiProizvodDialog.sacuvajTehnickiProizvod();
             }
         } 
         else {

@@ -14,9 +14,8 @@ public class Promoter extends AngazovanaOsoba {
 		this.odmori = odmori;
 	}
 
-	public Promoter(String ime, String prezime, int plata, LocalDate pocetakAngazovanja,
-			LocalDate zavrsetakAngazovanja) {
-		super(ime, prezime, plata, pocetakAngazovanja, zavrsetakAngazovanja);
+	public Promoter() {
+		super();
 	}
 
 	public Menadzer getNaredjeni() {
