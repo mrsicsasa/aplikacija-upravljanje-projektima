@@ -3,6 +3,7 @@ package controller;
 import view.KvarljiviProizvodDialog;
 import view.MainView;
 import view.MenadzerDialog;
+import view.PretragaDialog;
 import view.PromoterDialog;
 import view.TehnickiProizvodDialog;
 
@@ -76,11 +77,14 @@ public class MainController {
                 // Ako korisnik pritisne "Sacuvaj"
                 promoterDialog.sacuvajPromotera();
             }
-        } 
-        else {
-            // Dodajte sličan kod za ostala dugmad prema potrebama vaše aplikacije
-            JOptionPane.showMessageDialog(null, "Forma za Button " + (index + 1));
-        }
-    }
+        }  else if (index == 4) {
+        	PretragaDialog pretragaDialog = new PretragaDialog();
+            Object[] options5 = {"Pretrazi", "Otkazi"};
+            // Optional: Customize dialog appearance or behavior
+            int result5 = JOptionPane.showOptionDialog(null, pretragaDialog, "Pretraga",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options5, options5[0]);
 
-    }
+        }
+    
+
+    }}
