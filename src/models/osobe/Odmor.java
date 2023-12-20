@@ -35,7 +35,7 @@ public class Odmor {
 
 	@Override
 	public String toString() {
-		return "Odmor [pocetakOdmora=" + pocetakOdmora + ", krajOdmora=" + krajOdmora + "]";
+		return  pocetakOdmora + ":" + krajOdmora;
 	}
 
 }

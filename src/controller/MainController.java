@@ -68,7 +68,7 @@ public class MainController {
             // Ako je pritisnuto treće dugme
             PromoterDialog promoterDialog=new PromoterDialog();
             Object[] options4 = {"Sacuvaj", "Otkazi"};
-           // tehnickiProizvodDialog.osveziTabelu();
+            promoterDialog.osveziTabelu();
             int result4 = JOptionPane.showOptionDialog(null, promoterDialog, "Izmena kvarljivih proizvoda",
                     JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options4, options4[0]);
 
