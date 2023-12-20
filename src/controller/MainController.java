@@ -74,7 +74,7 @@ public class MainController {
 
             if (result4 == JOptionPane.YES_OPTION) {
                 // Ako korisnik pritisne "Sacuvaj"
-                //tehnickiProizvodDialog.sacuvajTehnickiProizvod();
+                promoterDialog.sacuvajPromotera();
             }
         } 
         else {

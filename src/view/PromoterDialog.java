@@ -216,32 +216,101 @@ public class PromoterDialog extends JPanel {
     }
 
     private void izbrisiPromotera() {
-        // Implementirajte funkcionalnost za brisanje promotera
-        // ...
+        int selectedRow = promoterTable.getSelectedRow();
+        if (selectedRow != -1) {
+            String imePromotera = promoterTable.getValueAt(selectedRow, 0).toString();
+            String prezimePromotera = promoterTable.getValueAt(selectedRow, 1).toString();
 
-        promoteri.clear();
-        osveziTabelu();
+            Promoter pronadjeniPromoter = null;
+            for (Promoter promoter : promoteri) {
+                if (promoter.getIme().equals(imePromotera) && promoter.getPrezime().equals(prezimePromotera)) {
+                    pronadjeniPromoter = promoter;
+                    break;
+                }
+            }
+
+            if (pronadjeniPromoter != null) {
+                // Ažurirajte listu svih promotera (izbrišite promotera)
+                promoteri.remove(pronadjeniPromoter);
+                osveziTabelu();
+                sacuvajPromotereUFajl(promoteri);
+            }
+        }
     }
 
     private void izmeniPromotera() {
-        // Implementirajte funkcionalnost za izmenu promotera
-        // ...
+        int selectedRow = promoterTable.getSelectedRow();
+        if (selectedRow != -1) {
+            // Uzmi vrednosti iz polja za unos
+        	 String imePromotera = promoterTable.getValueAt(selectedRow, 0).toString();
+             String prezimePromotera = promoterTable.getValueAt(selectedRow, 1).toString();
+            // Pronađi promotera u listi na osnovu selektovanog reda u tabeli
+            Promoter pronadjeniPromoter = null;
+            for (Promoter promoter : promoteri) {
+                if (promoter.getIme().equals(imePromotera) && promoter.getPrezime().equals(prezimePromotera)) {
+                    pronadjeniPromoter = promoter;
+                    break;
+                }
+            }
 
-        promoteri.clear();
-        osveziTabelu();
+            // Ako je promotera pronađen, ažurirajte vrednosti
+            if (pronadjeniPromoter != null) {
+            	String novoIme = imeField.getText();
+                String novoPrezime = prezimeField.getText();
+                String novaPlata = plataField.getText();
+                String noviPocetakAngazovanja = pocetakAngazovanjaField.getText();
+                String noviKrajAngazovanja = krajAngazovanjaField.getText();
+                pronadjeniPromoter.setIme(novoIme);
+                pronadjeniPromoter.setPrezime(novoPrezime);
+                pronadjeniPromoter.setPlata(Integer.parseInt(novaPlata));
+                pronadjeniPromoter.setPocetakAngazovanja(parsirajDatum(noviPocetakAngazovanja));
+                pronadjeniPromoter.setZavrsetakAngazovanja(parsirajDatum(noviKrajAngazovanja));
 
-        JOptionPane.showMessageDialog(this, "Promoter izmenjen!");
-        clearFields();
+                // Ažurirajte listu svih promotera (izmenite promotera)
+                for (int i = 0; i < promoteri.size(); i++) {
+                    if (rowMatchesCurrentPromoter(promoteri.get(i))) {
+                        promoteri.set(i, pronadjeniPromoter);
+                        break;
+                    }
+                }
+
+                // Osveži tabelu i sačuvaj promenjene promotere u fajl
+                osveziTabelu();
+                sacuvajPromotereUFajl(promoteri);
+            }
+        }
     }
 
-    private void sacuvajPromotera() {
-        // Implementirajte funkcionalnost za cuvanje promotera
-        // ...
 
-        promoteri.clear();
+    public void sacuvajPromotera() {
+        // Dobijanje podataka iz JTextField polja
+        String ime = imeField.getText();
+        String prezime = prezimeField.getText();
+        int plata = Integer.parseInt(plataField.getText());
+        LocalDate pocetakAngazovanja = parsirajDatum(pocetakAngazovanjaField.getText());
+        LocalDate krajAngazovanja = parsirajDatum(krajAngazovanjaField.getText());
+        String imeNadredjenog=imeNadrednjenogField.getText();
+        Menadzer m=new Menadzer();
+        m.setIme(imeNadredjenog);
+        Odmori odmori=new Odmori();
+        // Kreiranje nove instance Promotera
+        Promoter noviPromoter = new Promoter(ime, prezime, plata, pocetakAngazovanja, krajAngazovanja,m,odmori);
+
+        // Dodavanje odmora iz odmoriDropdown ComboBox-a
+        for (int i = 0; i < odmoriDropdown.getItemCount(); i++) {
+            noviPromoter.getOdmori().dodajOdmor(odmoriDropdown.getItemAt(i));
+        }
+
+        // Dodavanje novog promotera u listu promotera
+        promoteri.add(noviPromoter);
+
+        // Čuvanje promenjenih podataka u fajlu
+        sacuvajPromotereUFajl(promoteri);
+
+        // Osvežavanje tabele
         osveziTabelu();
 
-        JOptionPane.showMessageDialog(this, "Promoter sacuvan!");
+        JOptionPane.showMessageDialog(this, "Novi promoter dodat!");
         clearFields();
     }
 
@@ -313,4 +382,13 @@ public class PromoterDialog extends JPanel {
         writer.upis(FILE_NAME, podaci);
        
     }
+    private boolean rowMatchesCurrentPromoter(Promoter promoter) {
+        return promoter.getIme().equals(trenutniPromoter.getIme()) &&
+                promoter.getPrezime().equals(trenutniPromoter.getPrezime()) &&
+                promoter.getPlata() == trenutniPromoter.getPlata() &&
+                promoter.getPocetakAngazovanja().equals(trenutniPromoter.getPocetakAngazovanja()) &&
+                promoter.getZavrsetakAngazovanja().equals(trenutniPromoter.getZavrsetakAngazovanja());
+    }
+
+
 }
