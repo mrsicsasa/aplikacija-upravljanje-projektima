@@ -13,6 +13,7 @@ import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -118,7 +119,6 @@ public class MenadzerDialog extends JPanel {
 	}
 
 	private void izbrisiMenadzera() {
-		   String ime = imeField.getText();
 	        Writer writer = new Writer();
 	        Reader reader = new Reader();
 	        List<ArrayList<String>> data = reader.ucitaj(FILE_NAME);
@@ -132,6 +132,7 @@ public class MenadzerDialog extends JPanel {
 	            }
 	        }
 	        menadzeri.clear();
+	        clearFields();
 	        osveziTabelu();
 	}
 
@@ -180,40 +181,59 @@ public class MenadzerDialog extends JPanel {
 	}
 
 	public void sacuvajMenadzera() {
-		String ime = imeField.getText();
-		String prezime = prezimeField.getText();
-		int plata = Integer.parseInt(plataField.getText());
-		String ulogaNaziv = imeUlogaField.getText();
-		LocalDate pocetakAngazovanja=parsirajDatum(pocetakAngazovanjaField.getText());
-		LocalDate krajAngazovanja=parsirajDatum(krajAngazovanjaField.getText());
-		String opisUloge=opisUlogeField.getText();
-		String odgovornostiUloge=odgovornostiUlogeField.getText();
+	    try {
+	        String ime = imeField.getText();
+	        String prezime = prezimeField.getText();
+	        int plata = Integer.parseInt(plataField.getText());
 
-		Uloga uloga = new Uloga(ulogaNaziv, opisUloge, odgovornostiUloge); // Neki default opis i odgovornosti
+	    
+	        if (ime.isEmpty() || prezime.isEmpty()) {
+	            JOptionPane.showMessageDialog(this, "Polja 'Ime' i 'Prezime' ne smeju biti prazna.", "Greška", JOptionPane.ERROR_MESSAGE);
+	            return;
+	        }
 
-		Menadzer noviMenadzer = new Menadzer(ime, prezime, plata, pocetakAngazovanja, krajAngazovanja, uloga);
+	        String ulogaNaziv = imeUlogaField.getText();
+	        LocalDate pocetakAngazovanja = parsirajDatum(pocetakAngazovanjaField.getText());
+	        LocalDate krajAngazovanja = parsirajDatum(krajAngazovanjaField.getText());
+	        String opisUloge = opisUlogeField.getText();
+	        String odgovornostiUloge = odgovornostiUlogeField.getText();
 
-		System.out.println(noviMenadzer.toString());
-		Writer w = new Writer();
-		Reader r = new Reader();
-		List<ArrayList<String>> rezultat = r.ucitaj("korisnik.txt");
-		ArrayList<String> noviMenadzerPodaci=new ArrayList<String>();
-		noviMenadzerPodaci.add(noviMenadzer.getIme());
-		noviMenadzerPodaci.add(noviMenadzer.getPrezime());
-		noviMenadzerPodaci.add(String.valueOf(noviMenadzer.getPlata()));
-		noviMenadzerPodaci.add(parsirajDatumuString(noviMenadzer.getPocetakAngazovanja()));
-		noviMenadzerPodaci.add(parsirajDatumuString(noviMenadzer.getZavrsetakAngazovanja()));
-		noviMenadzerPodaci.add(noviMenadzer.getUloga().getNaziv());
-		noviMenadzerPodaci.add(noviMenadzer.getUloga().getOpis());
-		noviMenadzerPodaci.add(noviMenadzer.getUloga().getOdgovornosti());
-		rezultat.add(noviMenadzerPodaci);
-		w.upis("korisnik.txt", rezultat);
-		menadzeri.clear();
-		osveziTabelu();
+	       
+	        if (pocetakAngazovanja.isAfter(krajAngazovanja)) {
+	            JOptionPane.showMessageDialog(this, "Datum 'Pocetak angazovanja' ne sme biti posle datuma 'Kraj angazovanja'.", "Greška", JOptionPane.ERROR_MESSAGE);
+	            return;
+	        }
 
-		JOptionPane.showMessageDialog(this, "Menadzer sacuvan!");
-		clearFields();
+	        Uloga uloga = new Uloga(ulogaNaziv, opisUloge, odgovornostiUloge);
+
+	        Menadzer noviMenadzer = new Menadzer(ime, prezime, plata, pocetakAngazovanja, krajAngazovanja, uloga);
+
+	        Writer w = new Writer();
+	        Reader r = new Reader();
+	        List<ArrayList<String>> rezultat = r.ucitaj("korisnik.txt");
+	        ArrayList<String> noviMenadzerPodaci = new ArrayList<>();
+	        noviMenadzerPodaci.add(noviMenadzer.getIme());
+	        noviMenadzerPodaci.add(noviMenadzer.getPrezime());
+	        noviMenadzerPodaci.add(String.valueOf(noviMenadzer.getPlata()));
+	        noviMenadzerPodaci.add(parsirajDatumuString(noviMenadzer.getPocetakAngazovanja()));
+	        noviMenadzerPodaci.add(parsirajDatumuString(noviMenadzer.getZavrsetakAngazovanja()));
+	        noviMenadzerPodaci.add(noviMenadzer.getUloga().getNaziv());
+	        noviMenadzerPodaci.add(noviMenadzer.getUloga().getOpis());
+	        noviMenadzerPodaci.add(noviMenadzer.getUloga().getOdgovornosti());
+	        rezultat.add(noviMenadzerPodaci);
+	        w.upis("korisnik.txt", rezultat);
+	        menadzeri.clear();
+	        osveziTabelu();
+
+	        JOptionPane.showMessageDialog(this, "Menadzer sacuvan!");
+	        clearFields();
+	    } catch (NumberFormatException e) {
+	        JOptionPane.showMessageDialog(this, "Polje 'Plata' mora sadržavati numeričku vrednost.", "Greška", JOptionPane.ERROR_MESSAGE);
+	    } catch (DateTimeParseException e) {
+	        JOptionPane.showMessageDialog(this, "Neispravan format datuma. Molimo koristite format yyyy-MM-dd.", "Greška", JOptionPane.ERROR_MESSAGE);
+	    }
 	}
+
 
 	public void osveziTabelu() {
 		

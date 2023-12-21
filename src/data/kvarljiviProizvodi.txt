@@ -1,4 +1,3 @@
-KvarljiviProizvod1|500|Srbija|Model1|Komad|2023-01-01|25
-KvarljiviProizvod2|600|Hrvatska|Model2|Komad|2023-02-01|30
+KvarljiviProizvod23|600|Hrvatska|Model2|Komad|2023-02-01|30
 KvarljiviProizvod3|700|BiH|Model3|Komad|2023-03-01|20
-KvarljiviProizvod4|800|Crna Gora|Model4|Komad|2023-04-01|15
+KvarljiviProizvod133|500|Srbija|Model1|Komad|2023-01-01|25

@@ -107,7 +107,6 @@ public class TehnickiProizvodDialog extends JPanel {
     }
 
     private void izbrisiTehnickiProizvod() {
-        String naziv = nazivField.getText();
         Writer writer = new Writer();
         Reader reader = new Reader();
         List<ArrayList<String>> data = reader.ucitaj(FILE_NAME);
@@ -116,12 +115,10 @@ public class TehnickiProizvodDialog extends JPanel {
         while (iterator.hasNext()) {
             ArrayList<String> rez = iterator.next();
             if (rowMatchesCurrentTehnickiProizvod(rez)) {
-            	System.out.println("isti su");
                 iterator.remove();
+                writer.upis(FILE_NAME, data);
             }
-            System.out.println();
         }
-        writer.upis(FILE_NAME, data);
         tehnickiProizvodi.clear();
         osveziTabelu();
     }
@@ -168,40 +165,51 @@ public class TehnickiProizvodDialog extends JPanel {
     }
 
     public void sacuvajTehnickiProizvod() {
-        String naziv = nazivField.getText();
-        int cena = Integer.parseInt(cenaField.getText());
-        String zemljaPorekla = zemljaPoreklaField.getText();
-        String model = modelField.getText();
-        String jedinicaMere = jedinicaMereField.getText();
-        double dimenzijeDuzina =Double.parseDouble( dimenzijeDuzinaField.getText());
-        double dimenzijeSirina =Double.parseDouble( dimenzijeSirinaField.getText());
-        double nominalnaSnaga = Double.parseDouble(nominalnaSnagaField.getText());
-        double radniNapon = Double.parseDouble(radniNaponField.getText());
+        try {
+            String naziv = nazivField.getText();
+            int cena = Integer.parseInt(cenaField.getText());
+            String zemljaPorekla = zemljaPoreklaField.getText();
+            String model = modelField.getText();
+            String jedinicaMere = jedinicaMereField.getText();
+            double dimenzijeDuzina = Double.parseDouble(dimenzijeDuzinaField.getText());
+            double dimenzijeSirina = Double.parseDouble(dimenzijeSirinaField.getText());
+            double nominalnaSnaga = Double.parseDouble(nominalnaSnagaField.getText());
+            double radniNapon = Double.parseDouble(radniNaponField.getText());
 
-        TehnickiProizvod noviTehnickiProizvod = new TehnickiProizvod(naziv, cena, zemljaPorekla, model, jedinicaMere, new Dimenzije(dimenzijeDuzina,dimenzijeSirina), nominalnaSnaga, radniNapon);
+           
+            if (naziv.isEmpty() || zemljaPorekla.isEmpty() || model.isEmpty() || jedinicaMere.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Polja 'Naziv', 'Zemlja Porekla', 'Model' i 'Jedinica Mere' ne smeju biti prazna.", "Greška", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-        Writer w = new Writer();
-        Reader r = new Reader();
-        ArrayList<String> noviTehnickiProizvodPodaci = new ArrayList<>();
-        noviTehnickiProizvodPodaci.add(noviTehnickiProizvod.getNaziv());
-        noviTehnickiProizvodPodaci.add(String.valueOf(noviTehnickiProizvod.getCena()));
-        noviTehnickiProizvodPodaci.add(noviTehnickiProizvod.getZemljaPorekla());
-        noviTehnickiProizvodPodaci.add(noviTehnickiProizvod.getModel());
-        noviTehnickiProizvodPodaci.add(noviTehnickiProizvod.getJedinicaMere());
-        noviTehnickiProizvodPodaci.add(String.valueOf(noviTehnickiProizvod.getDimenzije().getDuzina()));
-        noviTehnickiProizvodPodaci.add(String.valueOf(noviTehnickiProizvod.getDimenzije().getSirina()));
-        noviTehnickiProizvodPodaci.add(String.valueOf(noviTehnickiProizvod.getNominalnaSnaga()));
-        noviTehnickiProizvodPodaci.add(String.valueOf(noviTehnickiProizvod.getRadniNapon()));
+            TehnickiProizvod noviTehnickiProizvod = new TehnickiProizvod(naziv, cena, zemljaPorekla, model, jedinicaMere, new Dimenzije(dimenzijeDuzina, dimenzijeSirina), nominalnaSnaga, radniNapon);
 
-        List<ArrayList<String>> rezultat = r.ucitaj(FILE_NAME);
-        rezultat.add(noviTehnickiProizvodPodaci);
-        w.upis(FILE_NAME, rezultat);
-        tehnickiProizvodi.clear();
-        osveziTabelu();
+            Writer w = new Writer();
+            Reader r = new Reader();
+            ArrayList<String> noviTehnickiProizvodPodaci = new ArrayList<>();
+            noviTehnickiProizvodPodaci.add(noviTehnickiProizvod.getNaziv());
+            noviTehnickiProizvodPodaci.add(String.valueOf(noviTehnickiProizvod.getCena()));
+            noviTehnickiProizvodPodaci.add(noviTehnickiProizvod.getZemljaPorekla());
+            noviTehnickiProizvodPodaci.add(noviTehnickiProizvod.getModel());
+            noviTehnickiProizvodPodaci.add(noviTehnickiProizvod.getJedinicaMere());
+            noviTehnickiProizvodPodaci.add(String.valueOf(noviTehnickiProizvod.getDimenzije().getDuzina()));
+            noviTehnickiProizvodPodaci.add(String.valueOf(noviTehnickiProizvod.getDimenzije().getSirina()));
+            noviTehnickiProizvodPodaci.add(String.valueOf(noviTehnickiProizvod.getNominalnaSnaga()));
+            noviTehnickiProizvodPodaci.add(String.valueOf(noviTehnickiProizvod.getRadniNapon()));
 
-        JOptionPane.showMessageDialog(this, "Tehnicki Proizvod sacuvan!");
-        clearFields();
+            List<ArrayList<String>> rezultat = r.ucitaj(FILE_NAME);
+            rezultat.add(noviTehnickiProizvodPodaci);
+            w.upis(FILE_NAME, rezultat);
+            tehnickiProizvodi.clear();
+            osveziTabelu();
+
+            JOptionPane.showMessageDialog(this, "Tehnicki Proizvod sacuvan!");
+            clearFields();
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Polja 'Cena', 'Dimenzije Duzina', 'Dimenzije Sirina', 'Nominalna Snaga' i 'Radni Napon' moraju sadržavati numeričku vrednost.", "Greška", JOptionPane.ERROR_MESSAGE);
+        }
     }
+
 
     public void osveziTabelu() {
         tehnickiProizvodi = getTehnickiProizvodi();
@@ -256,16 +264,17 @@ public class TehnickiProizvodDialog extends JPanel {
         }
 
         private boolean rowMatchesCurrentTehnickiProizvod(ArrayList<String> row) {
-            return row.get(0).equals(trenutniTehnickiProizvod.getNaziv()) &&
-                    row.get(1).equals(String.valueOf(trenutniTehnickiProizvod.getCena())) &&
-                    row.get(2).equals(trenutniTehnickiProizvod.getZemljaPorekla()) &&
-                    row.get(3).equals(trenutniTehnickiProizvod.getModel()) &&
-                    row.get(4).equals(trenutniTehnickiProizvod.getJedinicaMere()) &&
-                    row.get(5).equals(String.valueOf(trenutniTehnickiProizvod.getDimenzije().getDuzina())) &&
-                    row.get(6).equals(String.valueOf(trenutniTehnickiProizvod.getDimenzije().getSirina())) &&
-                    row.get(7).equals(String.valueOf(trenutniTehnickiProizvod.getNominalnaSnaga())) &&
-                    row.get(8).equals(String.valueOf(trenutniTehnickiProizvod.getRadniNapon()));
+            return row.get(0).trim().equals(trenutniTehnickiProizvod.getNaziv().trim()) &&
+                    row.get(1).trim().equals(String.valueOf(trenutniTehnickiProizvod.getCena()).trim()) &&
+                    row.get(2).trim().equals(trenutniTehnickiProizvod.getZemljaPorekla().trim()) &&
+                    row.get(3).trim().equals(trenutniTehnickiProizvod.getModel().trim()) &&
+                    row.get(4).trim().equals(trenutniTehnickiProizvod.getJedinicaMere().trim()) &&
+                    row.get(5).trim().equals(String.valueOf(trenutniTehnickiProizvod.getDimenzije().getDuzina()).trim()) &&
+                    row.get(6).trim().equals(String.valueOf(trenutniTehnickiProizvod.getDimenzije().getSirina()).trim()) &&
+                    row.get(7).trim().equals(String.valueOf(trenutniTehnickiProizvod.getNominalnaSnaga()).trim()) &&
+                    row.get(8).trim().equals(String.valueOf(trenutniTehnickiProizvod.getRadniNapon()).trim());
         }
+
 
         }
 

@@ -9,19 +9,32 @@ public class MainView {
     private JButton[] buttons;
 
     public MainView() {
-        frame = new JFrame("MVC SpringLayout Primjer");
+        frame = new JFrame("Upravljanje projektima");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         buttons = new JButton[5];
         for (int i = 0; i < 5; i++) {
-            buttons[i] = new JButton("Button " + (i + 1));
+           if(i==0) {
+        	   buttons[i] = new JButton("Mendazer");
+           }else if(i==1) {
+        	   buttons[i] = new JButton("Promoter");
+           }
+           else if(i==2) {
+        	   buttons[i] = new JButton("Kvarljivi proizvod");
+           }
+           else if(i==3) {
+        	   buttons[i] = new JButton("Tehnicki proizvod");
+           }
+           else if(i==4) {
+        	   buttons[i] = new JButton("Pretraga");
+           }
         }
 
         setupLayout();
         setupButtonListeners();
 
         frame.setSize(500, 500);
-        frame.setLocationRelativeTo(null); // Postavljanje prozora na sredinu ekrana
+        frame.setLocationRelativeTo(null); 
         frame.setVisible(true);
     }
 
@@ -38,7 +51,7 @@ public class MainView {
             contentPane.add(buttons[i]);
         }
 
-        // Postavljanje konkretnih ograničenja za SpringLayout
+        
         for (int i = 0; i < 5; i++) {
             layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, buttons[i], 0, SpringLayout.HORIZONTAL_CENTER, contentPane);
             layout.putConstraint(SpringLayout.VERTICAL_CENTER, buttons[i], i * 30, SpringLayout.VERTICAL_CENTER, contentPane);
@@ -46,6 +59,5 @@ public class MainView {
     }
 
     private void setupButtonListeners() {
-        // Metoda se sada ne koristi jer smo logiku preneli u MainController
     }
 }

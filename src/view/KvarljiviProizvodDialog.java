@@ -10,6 +10,7 @@ import utils.Writer;
 
 import java.awt.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -27,7 +28,7 @@ public class KvarljiviProizvodDialog extends JPanel {
     public KvarljiviProizvodDialog() {
         setLayout(new BorderLayout());
 
-        JPanel formPanel = new JPanel(new GridLayout(6, 2));
+        JPanel formPanel = new JPanel(new GridLayout(10, 2));
         nazivField = new JTextField();
         cenaField = new JTextField();
         zemljaPoreklaField = new JTextField();
@@ -99,59 +100,77 @@ public class KvarljiviProizvodDialog extends JPanel {
     }
 
     private void izbrisiKvarljiviProizvod() {
-        String naziv = nazivField.getText();
-        Writer writer = new Writer();
-        Reader reader = new Reader();
-        List<ArrayList<String>> data = reader.ucitaj(FILE_NAME);
+    	 try {
+             // Input validation
+             if (nazivField.getText().isEmpty()) {
+                 JOptionPane.showMessageDialog(this, "Niste izabrali red.", "Greška", JOptionPane.ERROR_MESSAGE);
+                 return;
+             }
 
-        Iterator<ArrayList<String>> iterator = data.iterator();
-        while (iterator.hasNext()) {
-            ArrayList<String> rez = iterator.next();
-            if (rowMatchesCurrentKvarljiviProizvod(rez)) {
-                iterator.remove();
-                writer.upis(FILE_NAME, data);
-            }
-        }
-        kvarljiviProizvodi.clear();
-        osveziTabelu();
-    }
+             String naziv = nazivField.getText();
+             Writer writer = new Writer();
+             Reader reader = new Reader();
+             List<ArrayList<String>> data = reader.ucitaj(FILE_NAME);
+
+             Iterator<ArrayList<String>> iterator = data.iterator();
+             while (iterator.hasNext()) {
+                 ArrayList<String> row = iterator.next();
+                 if (rowMatchesCurrentKvarljiviProizvod(row)) {
+                     iterator.remove();
+                     writer.upis(FILE_NAME, data);
+                 }
+             }
+             kvarljiviProizvodi.clear();
+             osveziTabelu();
+         } catch (Exception e) {
+	            JOptionPane.showMessageDialog(this, "Došlo je do greške prilikom brisanja.", "Greška", JOptionPane.ERROR_MESSAGE);
+	            e.printStackTrace(); 
+	        }}
     public void sacuvajKvarljiviProizvod() {
-        String naziv = nazivField.getText();
-        int cena = Integer.parseInt(cenaField.getText());
-        String zemljaPorekla = zemljaPoreklaField.getText();
-        String model = modelField.getText();
-        String jedinicaMere = jedinicaMereField.getText();
-        LocalDate rokTrajanja = LocalDate.parse(rokTrajanjaField.getText());
-        int temperaturaSkladistenja = Integer.parseInt(temperaturaSkladistenjaField.getText());
-
-        KvarljiviProizvod noviKvarljiviProizvod = new KvarljiviProizvod(naziv, cena, zemljaPorekla, model, jedinicaMere, rokTrajanja, temperaturaSkladistenja);
-
-        Writer w = new Writer();
-        Reader r = new Reader();
-        Mapper m = new Mapper();
-        ArrayList<String> noviKvarljiviProizvodPodaci = new ArrayList<>();
-        noviKvarljiviProizvodPodaci.add(noviKvarljiviProizvod.getNaziv());
-        noviKvarljiviProizvodPodaci.add(String.valueOf(noviKvarljiviProizvod.getCena()));
-        noviKvarljiviProizvodPodaci.add(noviKvarljiviProizvod.getZemljaPorekla());
-        noviKvarljiviProizvodPodaci.add(noviKvarljiviProizvod.getModel());
-        noviKvarljiviProizvodPodaci.add(noviKvarljiviProizvod.getJedinicaMere());
-        noviKvarljiviProizvodPodaci.add(noviKvarljiviProizvod.getRokTrajanja().toString());
-        noviKvarljiviProizvodPodaci.add(String.valueOf(noviKvarljiviProizvod.getTemperaturaSkladistenja()));
-
-        List<ArrayList<String>> rezultat = r.ucitaj(FILE_NAME);
-        for (int i = 0; i < rezultat.size(); i++) {
-            ArrayList<String> rez = rezultat.get(i);
-            if (rowMatchesCurrentKvarljiviProizvod(rez)) {
-                rezultat.set(i, noviKvarljiviProizvodPodaci);
+    	try {
+          
+            if (nazivField.getText().isEmpty() || cenaField.getText().isEmpty() || zemljaPoreklaField.getText().isEmpty()
+                    || modelField.getText().isEmpty() || jedinicaMereField.getText().isEmpty()
+                    || rokTrajanjaField.getText().isEmpty() || temperaturaSkladistenjaField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Sva polja moraju biti popunjena.", "Greška", JOptionPane.ERROR_MESSAGE);
+                return;
             }
+
+            String naziv = nazivField.getText();
+            int cena = Integer.parseInt(cenaField.getText());
+            String zemljaPorekla = zemljaPoreklaField.getText();
+            String model = modelField.getText();
+            String jedinicaMere = jedinicaMereField.getText();
+            LocalDate rokTrajanja = LocalDate.parse(rokTrajanjaField.getText());
+            int temperaturaSkladistenja = Integer.parseInt(temperaturaSkladistenjaField.getText());
+
+            KvarljiviProizvod noviKvarljiviProizvod = new KvarljiviProizvod(naziv, cena, zemljaPorekla, model, jedinicaMere, rokTrajanja, temperaturaSkladistenja);
+
+            Writer w = new Writer();
+            Reader r = new Reader();
+            Mapper m = new Mapper();
+            ArrayList<String> noviKvarljiviProizvodPodaci = new ArrayList<>();
+            noviKvarljiviProizvodPodaci.add(noviKvarljiviProizvod.getNaziv());
+            noviKvarljiviProizvodPodaci.add(String.valueOf(noviKvarljiviProizvod.getCena()));
+            noviKvarljiviProizvodPodaci.add(noviKvarljiviProizvod.getZemljaPorekla());
+            noviKvarljiviProizvodPodaci.add(noviKvarljiviProizvod.getModel());
+            noviKvarljiviProizvodPodaci.add(noviKvarljiviProizvod.getJedinicaMere());
+            noviKvarljiviProizvodPodaci.add(noviKvarljiviProizvod.getRokTrajanja().toString());
+            noviKvarljiviProizvodPodaci.add(String.valueOf(noviKvarljiviProizvod.getTemperaturaSkladistenja()));
+
+            List<ArrayList<String>> rezultat = r.ucitaj(FILE_NAME);
+            rezultat.add(noviKvarljiviProizvodPodaci);
+            w.upis(FILE_NAME, rezultat);
+
+            kvarljiviProizvodi.clear();
+            osveziTabelu();
+
+            JOptionPane.showMessageDialog(this, "Kvarljivi proizvod sacuvan!");
+            clearFields();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Došlo je do greške prilikom dodavanja.", "Greška", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace(); 
         }
-        w.upis(FILE_NAME, rezultat);
-
-        kvarljiviProizvodi.clear();
-        osveziTabelu();
-
-        JOptionPane.showMessageDialog(this, "Kvarljivi proizvod sacuvan!");
-        clearFields();
     }
    
     private boolean rowMatchesCurrentKvarljiviProizvod(ArrayList<String> row) {
@@ -192,12 +211,12 @@ public class KvarljiviProizvodDialog extends JPanel {
     }
     private ArrayList<KvarljiviProizvod> getKvarljiviProizvodi() {
         Reader r = new Reader();
-        List<ArrayList<String>> rezultat = r.ucitaj("kvarljiviProizvodi.txt");  // Update the file name accordingly
+        List<ArrayList<String>> rezultat = r.ucitaj(FILE_NAME);  
         Mapper m = new Mapper();
-        ArrayList<KvarljiviProizvod> instance = m.konvertujUKvarljiviProizvod(rezultat); // Update the method accordingly
+        ArrayList<KvarljiviProizvod> instance = m.konvertujUKvarljiviProizvod(rezultat); 
         ArrayList<KvarljiviProizvod> sviKvarljiviProizvodi = new ArrayList<>();
         sviKvarljiviProizvodi.addAll(instance);
-        sviKvarljiviProizvodi.addAll(kvarljiviProizvodi); // Assuming kvarljiviProizvodi is your existing list
+        sviKvarljiviProizvodi.addAll(kvarljiviProizvodi); 
         return sviKvarljiviProizvodi;
     }
     private void clearFields() {
