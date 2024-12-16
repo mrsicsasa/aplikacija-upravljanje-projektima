@@ -5,7 +5,7 @@ This is a Java-based application developed for the **Object-Oriented Programming
 ## Technologies Used
 
 - **Java**: Core programming language for application logic.
-- **Swing:  For graphical user interface design.
+- **Swing**:  For graphical user interface design.
 
 ## Setup and Installation
 
